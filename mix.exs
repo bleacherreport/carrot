@@ -52,7 +52,7 @@ defmodule Kanin.MixProject do
       coveralls: :test,
       "coveralls.detail": :test,
       "coveralls.json": :test,
-      "coveralls.travis": :test,
+      "coveralls.travis": :test
     ]
   end
 
