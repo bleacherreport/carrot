@@ -2,6 +2,8 @@
 
 > AMQP connection manager
 
+[![Build Status](https://www.travis-ci.org/bleacherreport/kanin.svg?branch=master)](https://www.travis-ci.org/bleacherreport/kanin)
+
 ## Naming
 
 Kanin is Swedish for rabbit.
