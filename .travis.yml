@@ -11,6 +11,9 @@ otp_release:
 services:
   - rabbitmq
 
+env:
+  - MIX_ENV=test
+
 script:
   - mix credo --strict
   - mix format --check-formatted

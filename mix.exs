@@ -33,8 +33,8 @@ defmodule Kanin.MixProject do
       {:amqp, "~> 1.0"},
 
       # dev and test dependencies
-      {:credo, "~> 0.8", only: :dev},
-      {:dialyxir, "~> 0.5", only: :dev},
+      {:credo, "~> 0.8", only: [:dev, :test]},
+      {:dialyxir, "~> 0.5", only: [:dev, :test]},
       {:excoveralls, "~> 0.9", only: :test},
       {:ex_doc, "> 0.0.0", only: :dev}
     ]
@@ -51,8 +51,7 @@ defmodule Kanin.MixProject do
     [
       coveralls: :test,
       "coveralls.detail": :test,
-      "coveralls.json": :test,
-      "coveralls.travis": :test
+      "coveralls.json": :test
     ]
   end
 
