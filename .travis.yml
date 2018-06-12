@@ -17,4 +17,7 @@ env:
 script:
   - mix credo --strict
   - mix format --check-formatted
-  - mix coveralls.travis
+  - mix coveralls.json
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
