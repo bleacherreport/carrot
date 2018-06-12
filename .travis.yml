@@ -8,11 +8,10 @@ elixir:
 otp_release:
   - 20.3
 
+services:
+  - rabbitmq
+
 script:
   - mix credo --strict
-  - mix dialyzer
   - mix format --check-formatted
-  - mix coveralls.json
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - mix coveralls.travis
