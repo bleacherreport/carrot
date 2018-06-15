@@ -10,7 +10,7 @@ defmodule Kanin.MixProject do
       deps: deps(),
       description: "AMQP connection manager",
       dialyzer: dialyzer(),
-      elixir: "~> 1.6",
+      elixir: "~> 1.5 or ~> 1.6",
       homepage_url: @url,
       name: "Kanin",
       package: package(),
