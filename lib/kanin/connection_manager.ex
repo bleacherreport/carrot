@@ -37,19 +37,17 @@ defmodule Kanin.ConnectionManager do
 
     @type connection_options :: Keyword.t()
 
-    @type timer :: {reference() | nil, Backoff.t()}
-
     @type t :: %__MODULE__{
             connection_options: connection_options(),
             connection_monitor: reference() | nil,
             state: :disconnected | AMQP.Connection.t(),
-            timer: timer()
+            backoff: Backoff.t()
           }
 
     defstruct connection_options: [],
               connection_monitor: nil,
               state: :disconnected,
-              timer: {nil, %Backoff{}}
+              backoff: %Backoff{}
   end
 
   # Public API
@@ -120,7 +118,7 @@ defmodule Kanin.ConnectionManager do
     {:ok,
      %State{
        connection_options: config,
-       timer: {nil, Backoff.new(backoff)}
+       backoff: Backoff.new(backoff)
      }}
   end
 
@@ -137,18 +135,18 @@ defmodule Kanin.ConnectionManager do
   @impl true
   def handle_info(
         :connect,
-        %State{state: :disconnected, connection_options: opts, timer: timer} = state
+        %State{state: :disconnected, connection_options: opts, backoff: backoff} = state
       ) do
     case AMQP.Connection.open(opts) do
       {:ok, %AMQP.Connection{pid: pid} = conn} ->
         ref = Process.monitor(pid)
 
         {:noreply,
-         %State{state | connection_monitor: ref, state: conn, timer: reset_timer(timer)}}
+         %State{state | connection_monitor: ref, state: conn, backoff: Backoff.reset(backoff)}}
 
       {:error, reason} ->
         Logger.error("Unable to connect to AMQP server - reason: #{inspect(reason)}")
-        {:noreply, %State{state | timer: backoff(timer)}}
+        {:noreply, %State{state | backoff: backoff(backoff)}}
     end
   end
 
@@ -164,7 +162,7 @@ defmodule Kanin.ConnectionManager do
        state
        | connection_monitor: nil,
          state: :disconnected,
-         timer: reset_timer(state.timer)
+         backoff: backoff(state.backoff)
      }}
   end
 
@@ -184,24 +182,9 @@ defmodule Kanin.ConnectionManager do
 
   # Private helpers
 
-  defp backoff({nil, %Backoff{state: nil} = backoff}),
-    do: connect_after(Backoff.next(backoff))
-
-  defp backoff({ref, %Backoff{} = backoff}) do
-    if ref, do: Process.cancel_timer(ref)
-    connect_after(Backoff.next(backoff))
-  end
-
-  defp reset_timer({ref, backoff}) do
-    if ref, do: Process.cancel_timer(ref)
-    {nil, Backoff.reset(backoff)}
-  end
-
-  defp connect_after({nil, backoff}),
-    do: connect_after({0, backoff})
-
-  defp connect_after({ms, backoff}) do
-    ref = Process.send_after(self(), :connect, ms)
-    {ref, backoff}
+  defp backoff(backoff) do
+    backoff
+    |> Backoff.next()
+    |> Backoff.schedule(self(), :connect)
   end
 end

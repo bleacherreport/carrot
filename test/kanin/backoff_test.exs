@@ -1,5 +1,6 @@
 defmodule Kanin.BackoffTest do
   use ExUnit.Case
+  doctest Kanin.Backoff
 
   alias Kanin.Backoff
 
@@ -16,20 +17,20 @@ defmodule Kanin.BackoffTest do
   describe "next/1" do
     test "returns a tuple containing the next value and the new state" do
       backoff = Backoff.new(min: 100, max: 3000)
-      assert {100, backoff} = Backoff.next(backoff)
-      assert {200, backoff} = Backoff.next(backoff)
-      assert {400, backoff} = Backoff.next(backoff)
-      assert {800, backoff} = Backoff.next(backoff)
-      assert {1600, backoff} = Backoff.next(backoff)
-      assert {3000, backoff} = Backoff.next(backoff)
-      assert {nil, _backoff} = Backoff.next(backoff)
+      assert %Backoff{state: 100} = backoff = Backoff.next(backoff)
+      assert %Backoff{state: 200} = backoff = Backoff.next(backoff)
+      assert %Backoff{state: 400} = backoff = Backoff.next(backoff)
+      assert %Backoff{state: 800} = backoff = Backoff.next(backoff)
+      assert %Backoff{state: 1600} = backoff = Backoff.next(backoff)
+      assert %Backoff{state: 3000} = backoff = Backoff.next(backoff)
+      assert %Backoff{state: nil} = Backoff.next(backoff)
     end
   end
 
   describe "reset/1" do
     test "sets state field to nil" do
       backoff = Backoff.new(min: 100, max: 3000)
-      assert {100, backoff} = Backoff.next(backoff)
+      assert %Backoff{state: 100} = backoff = Backoff.next(backoff)
       assert %Backoff{state: nil} = Backoff.reset(backoff)
     end
   end

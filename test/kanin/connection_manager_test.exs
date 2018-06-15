@@ -24,12 +24,12 @@ defmodule Kanin.ConnectionManagerTest do
 
     test "max_backoff_ms defaults to 30_000" do
       {:ok, pid} = CM.start_link([])
-      assert %CM.State{timer: {_, %Backoff{max: 30_000}}} = :sys.get_state(pid)
+      assert %CM.State{backoff: %Backoff{max: 30_000}} = :sys.get_state(pid)
     end
 
     test "min_backoff_ms defaults to 1000" do
       {:ok, pid} = CM.start_link([])
-      assert %CM.State{timer: {_, %Backoff{min: 1000}}} = :sys.get_state(pid)
+      assert %CM.State{backoff: %Backoff{min: 1000}} = :sys.get_state(pid)
     end
 
     test "backoff strategy" do
@@ -42,7 +42,7 @@ defmodule Kanin.ConnectionManagerTest do
           assert_backoff(pid, 400)
           assert_backoff(pid, 800)
           assert_backoff(pid, 1000)
-          # timer restarts
+          # backoff restarts
           assert_backoff(pid, [nil, 100])
         end)
 
@@ -86,7 +86,7 @@ defmodule Kanin.ConnectionManagerTest do
           {:DOWN, ^ref, :process, ^conn, _reason} ->
             refute Process.alive?(conn)
 
-            assert_backoff(pid, nil)
+            assert_backoff(pid, [nil, 1000])
         end
       end)
     end
@@ -111,7 +111,7 @@ defmodule Kanin.ConnectionManagerTest do
 
   def assert_backoff(pid, list) when is_list(list) do
     state = :sys.get_state(pid)
-    assert %CM.State{state: :disconnected, timer: {_ref, %Backoff{state: state}}} = state
+    assert %CM.State{state: :disconnected, backoff: %Backoff{state: state}} = state
     # depending on the timing of the test we could either be retrying
     # immediately or have already started backoff.
     assert state in list
@@ -119,7 +119,7 @@ defmodule Kanin.ConnectionManagerTest do
 
   def assert_backoff(pid, ms) do
     state = :sys.get_state(pid)
-    assert %CM.State{state: :disconnected, timer: {_ref, %Backoff{state: ^ms}}} = state
+    assert %CM.State{state: :disconnected, backoff: %Backoff{state: ^ms}} = state
     if ms, do: Process.sleep(ms)
   end
 end
