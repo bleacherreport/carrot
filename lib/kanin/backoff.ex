@@ -1,8 +1,6 @@
 defmodule Kanin.Backoff do
   @moduledoc """
   Provides functions to facilitate exponential backoff.
-
-
   """
 
   import Bitwise
@@ -29,7 +27,6 @@ defmodule Kanin.Backoff do
   Creates a new `Backoff` struct based on provided options.
 
   ## Options
-
 
     * `:min` - The minimum number of milliseconds for starting the backoff process (default: `1000`)
     * `:max` - The maximum number of milliseconds before restarting the backoff process (default: `30_000`)
