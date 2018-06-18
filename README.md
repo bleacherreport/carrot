@@ -3,6 +3,7 @@
 > AMQP connection manager
 
 [![Build Status](https://www.travis-ci.org/bleacherreport/kanin.svg?branch=master)](https://www.travis-ci.org/bleacherreport/kanin)
+[![codecov](https://codecov.io/gh/bleacherreport/kanin/branch/master/graph/badge.svg)](https://codecov.io/gh/bleacherreport/kanin)
 
 ## Naming
 
