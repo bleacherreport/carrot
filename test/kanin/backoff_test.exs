@@ -1,8 +1,8 @@
-defmodule Kanin.BackoffTest do
+defmodule Carrot.BackoffTest do
   use ExUnit.Case
-  doctest Kanin.Backoff
+  doctest Carrot.Backoff
 
-  alias Kanin.Backoff
+  alias Carrot.Backoff
 
   describe "new/1" do
     test "returns a new Backoff struct with defaults" do

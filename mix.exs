@@ -1,18 +1,18 @@
-defmodule Kanin.MixProject do
+defmodule Carrot.MixProject do
   use Mix.Project
 
-  @url "https://github.com/bleacherreport/kanin"
+  @url "https://github.com/bleacherreport/carrot"
   @version "1.0.0"
 
   def project do
     [
-      app: :kanin,
+      app: :carrot,
       deps: deps(),
       description: "AMQP connection manager",
       dialyzer: dialyzer(),
       elixir: "~> 1.5 or ~> 1.6",
       homepage_url: @url,
-      name: "Kanin",
+      name: "Carrot",
       package: package(),
       preferred_cli_env: preferred_cli_env(),
       source_url: @url,
@@ -59,7 +59,7 @@ defmodule Kanin.MixProject do
     [
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/bleacherreport/kanin"},
+      links: %{"GitHub" => "https://github.com/bleacherreport/carrot"},
       maintainers: ["Sonny Scroggin"]
     ]
   end

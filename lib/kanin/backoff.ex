@@ -1,11 +1,11 @@
-defmodule Kanin.Backoff do
+defmodule Carrot.Backoff do
   @moduledoc """
   Provides functions to facilitate exponential backoff.
   """
 
   import Bitwise
 
-  alias Kanin.Backoff
+  alias Carrot.Backoff
 
   @min 1_000
   @max 30_000
@@ -33,11 +33,11 @@ defmodule Kanin.Backoff do
 
   ## Examples
 
-      iex> Kanin.Backoff.new()
-      %Kanin.Backoff{min: 1000, max: 30_000, state: nil}
+      iex> Carrot.Backoff.new()
+      %Carrot.Backoff{min: 1000, max: 30_000, state: nil}
 
-      iex> Kanin.Backoff.new(min: 100, max: 1000)
-      %Kanin.Backoff{min: 100, max: 1_000, state: nil}
+      iex> Carrot.Backoff.new(min: 100, max: 1000)
+      %Carrot.Backoff{min: 100, max: 1_000, state: nil}
 
   """
   @spec new(options()) :: Backoff.t()
@@ -53,16 +53,16 @@ defmodule Kanin.Backoff do
 
   ## Examples
 
-      iex> backoff = Kanin.Backoff.new(min: 100, max: 400)
-      %Kanin.Backoff{min: 100, max: 400, state: nil}
-      iex> backoff = Kanin.Backoff.next(backoff)
-      %Kanin.Backoff{min: 100, max: 400, state: 100}
-      iex> backoff = Kanin.Backoff.next(backoff)
-      %Kanin.Backoff{min: 100, max: 400, state: 200}
-      iex> backoff = Kanin.Backoff.next(backoff)
-      %Kanin.Backoff{min: 100, max: 400, state: 400}
-      iex> _backoff = Kanin.Backoff.next(backoff)
-      %Kanin.Backoff{min: 100, max: 400, state: nil}
+      iex> backoff = Carrot.Backoff.new(min: 100, max: 400)
+      %Carrot.Backoff{min: 100, max: 400, state: nil}
+      iex> backoff = Carrot.Backoff.next(backoff)
+      %Carrot.Backoff{min: 100, max: 400, state: 100}
+      iex> backoff = Carrot.Backoff.next(backoff)
+      %Carrot.Backoff{min: 100, max: 400, state: 200}
+      iex> backoff = Carrot.Backoff.next(backoff)
+      %Carrot.Backoff{min: 100, max: 400, state: 400}
+      iex> _backoff = Carrot.Backoff.next(backoff)
+      %Carrot.Backoff{min: 100, max: 400, state: nil}
 
   """
   @spec next(Backoff.t()) :: Backoff.t()
@@ -83,12 +83,12 @@ defmodule Kanin.Backoff do
 
   ## Example
 
-      iex> backoff = Kanin.Backoff.new()
-      %Kanin.Backoff{min: 1000, max: 30_000, state: nil}
-      iex> backoff = Kanin.Backoff.next(backoff)
-      %Kanin.Backoff{min: 1000, max: 30_000, state: 1000}
-      iex> _backoff = Kanin.Backoff.reset(backoff)
-      %Kanin.Backoff{min: 1000, max: 30_000, state: nil}
+      iex> backoff = Carrot.Backoff.new()
+      %Carrot.Backoff{min: 1000, max: 30_000, state: nil}
+      iex> backoff = Carrot.Backoff.next(backoff)
+      %Carrot.Backoff{min: 1000, max: 30_000, state: 1000}
+      iex> _backoff = Carrot.Backoff.reset(backoff)
+      %Carrot.Backoff{min: 1000, max: 30_000, state: nil}
 
   """
   @spec reset(Backoff.t()) :: Backoff.t()
@@ -104,12 +104,12 @@ defmodule Kanin.Backoff do
 
   ## Examples
 
-      iex> backoff = Kanin.Backoff.new(min: 100, max: 200)
-      %Kanin.Backoff{min: 100, max: 200, state: nil}
-      iex> backoff = Kanin.Backoff.next(backoff)
-      %Kanin.Backoff{min: 100, max: 200, state: 100}
-      iex> _backoff = Kanin.Backoff.schedule(backoff, self(), :connect)
-      %Kanin.Backoff{min: 100, max: 200, state: 100}
+      iex> backoff = Carrot.Backoff.new(min: 100, max: 200)
+      %Carrot.Backoff{min: 100, max: 200, state: nil}
+      iex> backoff = Carrot.Backoff.next(backoff)
+      %Carrot.Backoff{min: 100, max: 200, state: 100}
+      iex> _backoff = Carrot.Backoff.schedule(backoff, self(), :connect)
+      %Carrot.Backoff{min: 100, max: 200, state: 100}
       iex> receive do
       ...>   :connect ->
       ...>     :ok

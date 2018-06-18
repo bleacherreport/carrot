@@ -1,4 +1,4 @@
-defmodule Kanin.ConnectionManager do
+defmodule Carrot.ConnectionManager do
   @moduledoc """
   AMQP Connection Manager.
 
@@ -10,8 +10,8 @@ defmodule Kanin.ConnectionManager do
   use GenServer
   require Logger
 
-  alias Kanin.Backoff
-  alias Kanin.ConnectionManager.State
+  alias Carrot.Backoff
+  alias Carrot.ConnectionManager.State
 
   @type backoff :: [{:min, pos_integer()}, {:max, pos_integer()}]
 
@@ -93,12 +93,12 @@ defmodule Kanin.ConnectionManager do
 
       # Healthy connection
 
-      {:ok, pid} = Kanin.ConnectionManager.start_link([...])
-      {:ok, chan} = Kanin.ConnectionManager.open_channel(pid)
+      {:ok, pid} = Carrot.ConnectionManager.start_link([...])
+      {:ok, chan} = Carrot.ConnectionManager.open_channel(pid)
 
       # Disconnected
 
-      {:error, :disconnected} = Kanin.ConnectionManager.open_channel(pid)
+      {:error, :disconnected} = Carrot.ConnectionManager.open_channel(pid)
 
   """
   @spec open_channel(GenServer.server(), pos_integer()) ::

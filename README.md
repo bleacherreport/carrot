@@ -1,32 +1,28 @@
-# Kanin
+# Carrot
 
 > AMQP connection manager
 
-[![Build Status](https://www.travis-ci.org/bleacherreport/kanin.svg?branch=master)](https://www.travis-ci.org/bleacherreport/kanin)
-[![codecov](https://codecov.io/gh/bleacherreport/kanin/branch/master/graph/badge.svg)](https://codecov.io/gh/bleacherreport/kanin)
-
-## Naming
-
-Kanin is Swedish for rabbit.
+[![Build Status](https://www.travis-ci.org/bleacherreport/carrot.svg?branch=master)](https://www.travis-ci.org/bleacherreport/carrot)
+[![codecov](https://codecov.io/gh/bleacherreport/carrot/branch/master/graph/badge.svg)](https://codecov.io/gh/bleacherreport/carrot)
 
 ## Installation
 
-The package can be installed by adding `kanin` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `carrot` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:kanin, "~> 1.0"}]
+  [{:carrot, "~> 1.0"}]
 end
 ```
 
 ## Configuration and startup
 
-Kanin does not use `Mix` or `Application` configuration. The `ConnectionManager`
+Carrot does not use `Mix` or `Application` configuration. The `ConnectionManager`
 simply takes a `Keyword` list of connection options as the first argument to
 `start_link/2`:
 
 ```elixir
-{:ok, pid} = Kanin.ConnectionManager.start_link([
+{:ok, pid} = Carrot.ConnectionManager.start_link([
   host: "localhost",
   password: "guest",
   username: "guest",
@@ -46,7 +42,7 @@ for more details.
 
 ```elixir
 ...
-worker(Kanin.ConnectionManager, [
+worker(Carrot.ConnectionManager, [
   [
     host: "localhost",
     password: "guest",
@@ -54,7 +50,7 @@ worker(Kanin.ConnectionManager, [
     virtual_host: "/"
   ],
   [
-    name: Kanin.ConnectionManager
+    name: Carrot.ConnectionManager
   ]
 ]),
 ...
@@ -90,4 +86,4 @@ config :lager,
 
 ## Documentation
 
-Documentation can be be found on [HexDocs](https://hexdocs.pm/kanin).
+Documentation can be be found on [HexDocs](https://hexdocs.pm/carrot).

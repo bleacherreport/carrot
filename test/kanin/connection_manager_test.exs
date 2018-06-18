@@ -1,10 +1,10 @@
-defmodule Kanin.ConnectionManagerTest do
+defmodule Carrot.ConnectionManagerTest do
   use ExUnit.Case
 
   import ExUnit.CaptureLog
 
-  alias Kanin.Backoff
-  alias Kanin.ConnectionManager, as: CM
+  alias Carrot.Backoff
+  alias Carrot.ConnectionManager, as: CM
 
   setup do
     {:ok,
