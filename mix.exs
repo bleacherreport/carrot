@@ -57,7 +57,7 @@ defmodule Kanin.MixProject do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*", "LICENCE*"],
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/bleacherreport/kanin"},
       maintainers: ["Sonny Scroggin"]
