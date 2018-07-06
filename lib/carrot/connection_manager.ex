@@ -29,6 +29,7 @@ defmodule Carrot.ConnectionManager do
           | {:ssl_options, [:ssl.ssl_option()]}
           | {:client_properties, [...]}
           | {:socket_options, [:gen_tcp.option()]}
+          | {:url, String.t()}
 
   @type connection_options :: [connection_option()]
 
@@ -73,6 +74,9 @@ defmodule Carrot.ConnectionManager do
     * `:socket_options` - Extra socket options. These are appended to the default options. \
                           See http://www.erlang.org/doc/man/inet.html#setopts-2 and http://www.erlang.org/doc/man/gen_tcp.html#connect-4 \
                           for descriptions of the available options.
+    * `:url` - The AMQP URI used to connect to the broker. If specified, it overrides all other connection options. \
+               See https://www.rabbitmq.com/uri-spec.html for more details on the RabbitMQ URI Specification
+
   ## Enabling SSL
 
   To enable SSL, supply the following in the `ssl_options` field:
@@ -133,11 +137,8 @@ defmodule Carrot.ConnectionManager do
   end
 
   @impl true
-  def handle_info(
-        :connect,
-        %State{state: :disconnected, connection_options: opts, backoff: backoff} = state
-      ) do
-    case AMQP.Connection.open(opts) do
+  def handle_info(:connect, %State{state: :disconnected, backoff: backoff} = state) do
+    case connect(state.connection_options) do
       {:ok, %AMQP.Connection{pid: pid} = conn} ->
         ref = Process.monitor(pid)
 
@@ -181,6 +182,14 @@ defmodule Carrot.ConnectionManager do
   end
 
   # Private helpers
+
+  defp connect(opts) do
+    if url = Keyword.get(opts, :url) do
+      AMQP.Connection.open(url)
+    else
+      AMQP.Connection.open(opts)
+    end
+  end
 
   defp backoff(backoff) do
     backoff

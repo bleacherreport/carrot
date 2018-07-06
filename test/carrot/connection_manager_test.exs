@@ -7,13 +7,15 @@ defmodule Carrot.ConnectionManagerTest do
   alias Carrot.ConnectionManager, as: CM
 
   setup do
+    username = System.get_env("RABBITMQ_USER") || "guest"
+    password = System.get_env("RABBITMQ_PASSWORD") || "guest"
+    host = System.get_env("RABBITMQ_HOST") || "localhost"
+    virtual_host = System.get_env("RABBITMQ_VHOST") || "/"
+    port = System.get_env("RABBITMQ_PORT") || 5672
+
     {:ok,
-     config: [
-       username: System.get_env("RABBITMQ_USER") || "guest",
-       password: System.get_env("RABBITMQ_PASSWORD") || "guest",
-       host: System.get_env("RABBITMQ_HOST") || "localhost",
-       virtual_host: System.get_env("RABBITMQ_VHOST") || "/"
-     ]}
+     config: [username: username, password: password, host: host, virtual_host: virtual_host],
+     url: "amqp://#{username}:#{password}@#{host}:#{port}/#{URI.encode_www_form(virtual_host)}"}
   end
 
   describe "start_link" do
@@ -47,6 +49,11 @@ defmodule Carrot.ConnectionManagerTest do
         end)
 
       assert output =~ "Unable to connect to AMQP server"
+    end
+
+    test "supports URL configuration", %{url: url} do
+      {:ok, pid} = CM.start_link(url: url)
+      assert {:ok, _} = CM.open_channel(pid)
     end
   end
 
