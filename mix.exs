@@ -2,7 +2,7 @@ defmodule Carrot.MixProject do
   use Mix.Project
 
   @url "https://github.com/bleacherreport/carrot"
-  @version "1.0.0"
+  @version "1.1.0"
 
   def project do
     [
